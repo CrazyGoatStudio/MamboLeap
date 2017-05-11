@@ -7,13 +7,14 @@ using System.Windows.Forms;
 
 namespace LeapMotion_visualizer
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         private byte[] imagedata = new byte[1];
-        private Controller controller = new Controller();
+        private Controller controller;
         Bitmap bitmap = new Bitmap(640, 480, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-        public Form1()
+        public Main(Controller c)
         {
+            this.controller = c;
             InitializeComponent();
             controller.EventContext = WindowsFormsSynchronizationContext.Current;
             controller.FrameReady += newFrameHandler;

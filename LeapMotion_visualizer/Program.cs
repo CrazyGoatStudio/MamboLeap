@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Leap;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +15,10 @@ namespace LeapMotion_visualizer
         [STAThread]
         static void Main()
         {
+            Controller controller = new Controller();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Modificadores.MultiFormContext(new Main(controller), new DataDisplayer(controller)));
         }
     }
 }

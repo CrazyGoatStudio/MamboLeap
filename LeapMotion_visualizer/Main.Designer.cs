@@ -1,6 +1,6 @@
 ﻿namespace LeapMotion_visualizer
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Variable del diseñador necesaria.
@@ -243,7 +243,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 611);
+            this.ClientSize = new System.Drawing.Size(672, 611);
             this.Controls.Add(this.bt_stopService);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.bt_startService);
