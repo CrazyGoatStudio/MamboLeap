@@ -11,20 +11,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Eneter.Messaging.MessagingSystems.TcpMessagingSystem;
+using Eneter.Messaging.EndPoints.TypedMessages;
+using Eneter.Messaging.MessagingSystems.MessagingSystemBase;
 
 namespace LeapMotion_visualizer
 {
+
     public partial class DataDisplayer : Form
     {
         private int frameCounter = 0;
         private Controller controller;
         //Declare and Initialize the IP Adress
-        static IPAddress ipAd = IPAddress.Parse("172.17.2.89");
-        //Declare and Initilize the Port Number;
-        static int PortNumber = 8888;
-        /* Initializes the Listener */
-        TcpListener ServerListener = new TcpListener(ipAd, PortNumber);
-        TcpClient clientSocket = default(TcpClient);
+        //static IPAddress ipAd = IPAddress.Parse("172.17.2.89");
+        ////Declare and Initilize the Port Number;
+        //static int PortNumber = 8888;
+        ///* Initializes the Listener */
+        //TcpListener ServerListener = new TcpListener(ipAd, PortNumber);
+        //TcpClient clientSocket = default(TcpClient);
+        private static IDuplexTypedMessageReceiver<MyResponse, MyRequest> myReceiver;
+        TypedRequestReceivedEventArgs<MyRequest> e = null;
 
         public DataDisplayer(Controller c)
         {
@@ -58,13 +64,24 @@ namespace LeapMotion_visualizer
                     if (rightHand != null)
                     {
                         #region Right Hand Yaw, Pitch, Roll
-                        float yaw = rightHand.Direction.Yaw;
-                        float pitch = - rightHand.Direction.Pitch;
-                        float roll = - rightHand.PalmNormal.Roll;
+                        float yaw = ToDegrees(rightHand.Direction.Yaw);
+                        float pitch = ToDegrees(- rightHand.Direction.Pitch);
+                        float roll = ToDegrees(- rightHand.PalmNormal.Roll);
 
-                        lblRightHand_yaw.Text = ToDegrees(yaw).ToString();
-                        lblRightHand_roll.Text = ToDegrees(roll).ToString();
-                        lblRightHand_pitch.Text = ToDegrees(pitch).ToString();
+                        lblRightHand_yaw.Text = yaw.ToString();
+                        lblRightHand_roll.Text = roll.ToString();
+                        lblRightHand_pitch.Text = pitch.ToString();
+
+                        if (e != null)
+                        {
+                            MyResponse aResponse = new MyResponse();
+                            aResponse.Yaw = yaw;
+                            aResponse.Pitch = pitch;
+                            aResponse.Roll = roll;
+                            // Send the response message back to the client.
+                            myReceiver.SendResponseMessage(e.ResponseReceiverId, aResponse);
+                        }
+                        
                         #endregion
                     }
 
@@ -102,63 +119,61 @@ namespace LeapMotion_visualizer
 
         private void btStartSocket_Click(object sender, EventArgs e)
         {
-            Thread ThreadingServer = new Thread(StartServer);
-            ThreadingServer.Start();
+            StartServer();
+            //Thread ThreadingServer = new Thread(StartServer);
+            //ThreadingServer.Start();
         }
 
         private void StartServer()
         {
-            Action<string> DelegateTeste_ModifyText = THREAD_MOD;
-            ServerListener.Start();
-            Invoke(DelegateTeste_ModifyText, "Server waiting connections!");
-            clientSocket = ServerListener.AcceptTcpClient();
-            Invoke(DelegateTeste_ModifyText, "Server ready!");
+            // Create message receiver receiving 'MyRequest' and receiving 'MyResponse'.
+            IDuplexTypedMessagesFactory aReceiverFactory = new DuplexTypedMessagesFactory();
+            myReceiver = aReceiverFactory.CreateDuplexTypedMessageReceiver<MyResponse, MyRequest>();
 
-            while (true)
-            {
-                try
-                {
+            // Subscribe to handle messages.
+            myReceiver.MessageReceived += OnMessageReceived;
 
-                    NetworkStream networkStream = clientSocket.GetStream();
-                    byte[] bytesFrom = new byte[20];
-                    networkStream.Read(bytesFrom, 0, 20);
-                    string dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
-                    dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
+            // Create TCP messaging.
+            IMessagingSystemFactory aMessaging = new TcpMessagingSystemFactory();
+            IDuplexInputChannel anInputChannel =
+               aMessaging.CreateDuplexInputChannel("tcp://0.0.0.0:8060/");
 
-                    string serverResponse = "Received!";
-                    Byte[] sendBytes = Encoding.ASCII.GetBytes(serverResponse);
-                    networkStream.Write(sendBytes, 0, sendBytes.Length);
-                    networkStream.Flush();
+            // Attach the input channel and start to listen to messages.
+            myReceiver.AttachDuplexInputChannel(anInputChannel);
 
-                }
-                catch
-                {
-                    ServerListener.Stop();
-                    ServerListener.Start();
-                    Invoke(DelegateTeste_ModifyText, "Server waiting connections!");
-                    clientSocket = ServerListener.AcceptTcpClient();
-                    Invoke(DelegateTeste_ModifyText, "Server ready!");
-                }
+            txtStatus.Text = ("The service is running. To stop press enter.");
+            
 
-            }
+            
+            
+        }
+
+        // It is called when a message is received.
+        private void OnMessageReceived(object sender, TypedRequestReceivedEventArgs<MyRequest> e)
+        {
+            this.e = e;
         }
 
         private void btStopSocket_Click(object sender, EventArgs e)
         {
-            try
-            {
-
-                ServerListener.Stop();
-
-            }
-            catch
-            {
-                ServerListener.Stop();
-                ServerListener.Start();
-                Invoke(DelegateTeste_ModifyText, "Server waiting connections!");
-                clientSocket = ServerListener.AcceptTcpClient();
-                Invoke(DelegateTeste_ModifyText, "Server ready!");
-            }
+            // Detach the input channel and stop listening.
+            // It releases the thread listening to messages.
+            myReceiver.DetachDuplexInputChannel();
         }
+    }
+
+    // Request message type
+    public class MyRequest
+    {
+        public string Text { get; set; }
+    }
+
+    // Response message type
+    public class MyResponse
+    {
+        public float Yaw { get; set; }
+        public float Pitch { get; set; }
+        public float Roll { get; set; }
+
     }
 }

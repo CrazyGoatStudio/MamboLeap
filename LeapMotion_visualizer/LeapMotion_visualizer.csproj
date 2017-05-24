@@ -36,6 +36,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Eneter.Messaging.Framework, Version=7.0.2.0, Culture=neutral, PublicKeyToken=b85852a6d7b5cd07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Eneter.Messaging.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="LeapCSharp.NET4.5, Version=3.2.0.0, Culture=neutral, PublicKeyToken=6e1b1368e71eba9b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\LeapCSharp.NET4.5.dll</HintPath>
