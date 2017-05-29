@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Eneter.Messaging.MessagingSystems.TcpMessagingSystem;
 using Eneter.Messaging.EndPoints.TypedMessages;
 using Eneter.Messaging.MessagingSystems.MessagingSystemBase;
+using LeapMotion_visualizer.Modificadores;
 
 namespace LeapMotion_visualizer
 {
@@ -80,6 +81,7 @@ namespace LeapMotion_visualizer
                             aResponse.Roll = roll;
                             // Send the response message back to the client.
                             myReceiver.SendResponseMessage(e.ResponseReceiverId, aResponse);
+
                         }
                         
                         #endregion
@@ -109,7 +111,7 @@ namespace LeapMotion_visualizer
         {
             float Degrees;
             Degrees = Radian * 180 / (float)Math.PI;
-            return Degrees;
+            return Degrees; 
         }
 
         private void THREAD_MOD(string teste)
@@ -158,6 +160,7 @@ namespace LeapMotion_visualizer
         {
             // Detach the input channel and stop listening.
             // It releases the thread listening to messages.
+            txtStatus.Text = "Socket detenido correctamente!";
             myReceiver.DetachDuplexInputChannel();
         }
     }
