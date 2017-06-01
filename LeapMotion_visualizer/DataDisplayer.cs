@@ -21,18 +21,13 @@ namespace LeapMotion_visualizer
 
     public partial class DataDisplayer : Form
     {
+
+        #region Variables 
         private int frameCounter = 0;
         private Controller controller;
-        //Declare and Initialize the IP Adress
-        //static IPAddress ipAd = IPAddress.Parse("172.17.2.89");
-        ////Declare and Initilize the Port Number;
-        //static int PortNumber = 8888;
-        ///* Initializes the Listener */
-        //TcpListener ServerListener = new TcpListener(ipAd, PortNumber);
-        //TcpClient clientSocket = default(TcpClient);
         private static IDuplexTypedMessageReceiver<MyResponse, MyRequest> myReceiver;
         TypedRequestReceivedEventArgs<MyRequest> e = null;
-
+        private bool isClientConnected;
         public DataDisplayer(Controller c)
         {
             this.controller = c;
@@ -40,13 +35,16 @@ namespace LeapMotion_visualizer
             controller.EventContext = WindowsFormsSynchronizationContext.Current;
             controller.FrameReady += newFrameHandler;
         }
+        #endregion
 
         void newFrameHandler(object sender, FrameEventArgs eventArgs)
         {
-            
+            #region Deteccion de manos
             Frame frame = eventArgs.frame;
             Hand rightHand = null;
             Hand leftHand = null;
+            float yawR = 0, pitchR = 0, rollR = 0;
+            float yawL = 0, pitchL = 0, rollL = 0;
             if (frame.Hands.Count > 0)
             {
                 List<Hand> hands = frame.Hands;
@@ -61,71 +59,58 @@ namespace LeapMotion_visualizer
                         rightHand = hands[i];
                     }
                 }
-                if (true) { 
+                if (true)
+                {
                     if (rightHand != null)
                     {
                         #region Right Hand Yaw, Pitch, Roll
-                        float yaw = ToDegrees(rightHand.Direction.Yaw);
-                        float pitch = ToDegrees(- rightHand.Direction.Pitch);
-                        float roll = ToDegrees(- rightHand.PalmNormal.Roll);
+                        yawR = ToDegrees(rightHand.Direction.Yaw);
+                        pitchR = ToDegrees(-rightHand.Direction.Pitch);
+                        rollR = ToDegrees(-rightHand.PalmNormal.Roll);
 
-                        lblRightHand_yaw.Text = yaw.ToString();
-                        lblRightHand_roll.Text = roll.ToString();
-                        lblRightHand_pitch.Text = pitch.ToString();
-
-                        if (e != null)
-                        {
-                            MyResponse aResponse = new MyResponse();
-                            aResponse.Yaw = yaw;
-                            aResponse.Pitch = pitch;
-                            aResponse.Roll = roll;
-                            // Send the response message back to the client.
-                            myReceiver.SendResponseMessage(e.ResponseReceiverId, aResponse);
-
-                        }
-                        
+                        lblRightHand_yaw.Text = yawR.ToString();
+                        lblRightHand_roll.Text = rollR.ToString();
+                        lblRightHand_pitch.Text = pitchR.ToString();
                         #endregion
                     }
 
                     if (leftHand != null)
                     {
                         #region Left Hand Yaw, Pitch, Roll
-                        float yaw = leftHand.Direction.Yaw;
-                        float pitch = -leftHand.Direction.Pitch;
-                        float roll = -leftHand.PalmNormal.Roll;
+                        yawL = ToDegrees(leftHand.Direction.Yaw);
+                        pitchL = ToDegrees(- leftHand.Direction.Pitch);
+                        rollL = ToDegrees(- leftHand.PalmNormal.Roll);
 
-                        lblLeftHand_yaw.Text = ToDegrees(yaw).ToString();
-                        lblLeftHand_roll.Text = ToDegrees(roll).ToString();
-                        lblLeftHand_pitch.Text = ToDegrees(pitch).ToString();
+                        lblLeftHand_yaw.Text = yawL.ToString();
+                        lblLeftHand_roll.Text = rollL.ToString();
+                        lblLeftHand_pitch.Text = pitchL.ToString();
                         #endregion
                     }
-
+                    DataSender(yawR, pitchR, rollR, yawL);
                     frameCounter = 0;
                 }
 
                 frameCounter++;
             }
+            else
+            {
+                DataSender();
+            }
+            #endregion
         }
 
-        float ToDegrees(float Radian)
-        {
-            float Degrees;
-            Degrees = Radian * 180 / (float)Math.PI;
-            return Degrees; 
-        }
-
-        private void THREAD_MOD(string teste)
-        {
-            txtStatus.Text += Environment.NewLine + teste;
-        }
-
+        #region Server Start/Buttons Server
         private void btStartSocket_Click(object sender, EventArgs e)
         {
             StartServer();
-            //Thread ThreadingServer = new Thread(StartServer);
-            //ThreadingServer.Start();
         }
-
+        private void btStopSocket_Click(object sender, EventArgs e)
+        {
+            // Detach the input channel and stop listening.
+            // It releases the thread listening to messages.
+            txtStatus.Text = "Socket detenido correctamente!";
+            myReceiver.DetachDuplexInputChannel();
+        }
         private void StartServer()
         {
             // Create message receiver receiving 'MyRequest' and receiving 'MyResponse'.
@@ -143,26 +128,47 @@ namespace LeapMotion_visualizer
             // Attach the input channel and start to listen to messages.
             myReceiver.AttachDuplexInputChannel(anInputChannel);
 
-            txtStatus.Text = ("The service is running. To stop press enter.");
-            
-
-            
-            
+            txtStatus.Text = ("The service is running.");
         }
-
-        // It is called when a message is received.
         private void OnMessageReceived(object sender, TypedRequestReceivedEventArgs<MyRequest> e)
         {
             this.e = e;
+            isClientConnected = true;
         }
+        #endregion
 
-        private void btStopSocket_Click(object sender, EventArgs e)
+        #region Configuraciones
+        private void DataSender(float yaw = 0, float pitch = 0, float roll = 0, float yawL = 0)
         {
-            // Detach the input channel and stop listening.
-            // It releases the thread listening to messages.
-            txtStatus.Text = "Socket detenido correctamente!";
-            myReceiver.DetachDuplexInputChannel();
+            if (e != null && isClientConnected)
+            {
+                try
+                {
+                    MyResponse aResponse = new MyResponse();
+                    aResponse.Yaw = yaw;
+                    aResponse.Pitch = pitch;
+                    aResponse.Roll = roll;
+                    aResponse.YawL = yawL;
+                    // Send the response message back to the client.
+                    myReceiver.SendResponseMessage(e.ResponseReceiverId, aResponse);
+                }
+                catch (Exception ex)
+                {
+                    ErrorHandler eh = new ErrorHandler(ex, "Conexion Interrumpida");
+                    eh.Show();
+                    isClientConnected = false;
+                }
+
+
+            }
         }
+        float ToDegrees(float Radian)
+        {
+            float Degrees;
+            Degrees = Radian * 180 / (float)Math.PI;
+            return Degrees;
+        }
+        #endregion
     }
 
     // Request message type
@@ -177,6 +183,6 @@ namespace LeapMotion_visualizer
         public float Yaw { get; set; }
         public float Pitch { get; set; }
         public float Roll { get; set; }
-
+        public float YawL { get; set; }
     }
 }

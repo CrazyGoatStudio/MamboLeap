@@ -19,3 +19,4 @@ C:\Users\alexreyros\MamboLeap\LeapMotion_visualizer\obj\Debug\LeapMotion_visuali
 C:\Users\alexreyros\MamboLeap\LeapMotion_visualizer\obj\Debug\LeapMotion_visualizer.DataDisplayer.resources
 C:\Users\alexreyros\MamboLeap\LeapMotion_visualizer\bin\Debug\Eneter.Messaging.Framework.pdb
 C:\Users\alexreyros\MamboLeap\LeapMotion_visualizer\bin\Debug\Eneter.Messaging.Framework.xml
+C:\Users\alexreyros\MamboLeap\LeapMotion_visualizer\obj\Debug\LeapMotion_visualizer.ErrorHandler.resources

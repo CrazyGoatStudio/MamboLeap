@@ -64,6 +64,12 @@
     <Compile Include="DataDisplayer.Designer.cs">
       <DependentUpon>DataDisplayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="ErrorHandler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ErrorHandler.Designer.cs">
+      <DependentUpon>ErrorHandler.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +82,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="DataDisplayer.resx">
       <DependentUpon>DataDisplayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ErrorHandler.resx">
+      <DependentUpon>ErrorHandler.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
