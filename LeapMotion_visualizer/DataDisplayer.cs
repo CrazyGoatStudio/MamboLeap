@@ -34,6 +34,8 @@ namespace LeapMotion_visualizer
             InitializeComponent();
             controller.EventContext = WindowsFormsSynchronizationContext.Current;
             controller.FrameReady += newFrameHandler;
+            btStartSocket.Enabled = true;
+            btStopSocket.Enabled = false;
         }
         #endregion
 
@@ -102,12 +104,16 @@ namespace LeapMotion_visualizer
         #region Server Start/Buttons Server
         private void btStartSocket_Click(object sender, EventArgs e)
         {
+            btStartSocket.Enabled = false;
+            btStopSocket.Enabled = true;
             StartServer();
         }
         private void btStopSocket_Click(object sender, EventArgs e)
         {
             // Detach the input channel and stop listening.
             // It releases the thread listening to messages.
+            btStartSocket.Enabled = true;
+            btStopSocket.Enabled = false;
             txtStatus.Text = "Socket detenido correctamente!";
             myReceiver.DetachDuplexInputChannel();
         }
