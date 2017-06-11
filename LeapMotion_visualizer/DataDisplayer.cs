@@ -28,6 +28,7 @@ namespace LeapMotion_visualizer
         private static IDuplexTypedMessageReceiver<MyResponse, MyRequest> myReceiver;
         TypedRequestReceivedEventArgs<MyRequest> e = null;
         private bool isClientConnected;
+
         public DataDisplayer(Controller c)
         {
             this.controller = c;
@@ -37,6 +38,7 @@ namespace LeapMotion_visualizer
             btStartSocket.Enabled = true;
             btStopSocket.Enabled = false;
         }
+
         #endregion
 
         void newFrameHandler(object sender, FrameEventArgs eventArgs)
@@ -168,6 +170,7 @@ namespace LeapMotion_visualizer
 
             }
         }
+
         float ToDegrees(float Radian)
         {
             float Degrees;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataDisplayer));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -38,12 +39,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lblRightHand_yaw = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblLeftHand_yaw = new System.Windows.Forms.Label();
+            this.lblLeftHand_pitch = new System.Windows.Forms.Label();
+            this.lblLeftHand_roll = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.lblLeftHand_roll = new System.Windows.Forms.Label();
-            this.lblLeftHand_pitch = new System.Windows.Forms.Label();
-            this.lblLeftHand_yaw = new System.Windows.Forms.Label();
             this.btStartSocket = new System.Windows.Forms.Button();
             this.btStopSocket = new System.Windows.Forms.Button();
             this.txtStatus = new System.Windows.Forms.TextBox();
@@ -175,6 +176,39 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(449, 70);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
+            // lblLeftHand_yaw
+            // 
+            this.lblLeftHand_yaw.AutoSize = true;
+            this.lblLeftHand_yaw.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLeftHand_yaw.Location = new System.Drawing.Point(3, 20);
+            this.lblLeftHand_yaw.Name = "lblLeftHand_yaw";
+            this.lblLeftHand_yaw.Size = new System.Drawing.Size(142, 50);
+            this.lblLeftHand_yaw.TabIndex = 6;
+            this.lblLeftHand_yaw.Text = "0";
+            this.lblLeftHand_yaw.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblLeftHand_pitch
+            // 
+            this.lblLeftHand_pitch.AutoSize = true;
+            this.lblLeftHand_pitch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLeftHand_pitch.Location = new System.Drawing.Point(151, 20);
+            this.lblLeftHand_pitch.Name = "lblLeftHand_pitch";
+            this.lblLeftHand_pitch.Size = new System.Drawing.Size(146, 50);
+            this.lblLeftHand_pitch.TabIndex = 5;
+            this.lblLeftHand_pitch.Text = "0";
+            this.lblLeftHand_pitch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblLeftHand_roll
+            // 
+            this.lblLeftHand_roll.AutoSize = true;
+            this.lblLeftHand_roll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLeftHand_roll.Location = new System.Drawing.Point(303, 20);
+            this.lblLeftHand_roll.Name = "lblLeftHand_roll";
+            this.lblLeftHand_roll.Size = new System.Drawing.Size(143, 50);
+            this.lblLeftHand_roll.TabIndex = 4;
+            this.lblLeftHand_roll.Text = "0";
+            this.lblLeftHand_roll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -207,39 +241,6 @@
             this.label8.TabIndex = 0;
             this.label8.Text = "Yaw";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblLeftHand_roll
-            // 
-            this.lblLeftHand_roll.AutoSize = true;
-            this.lblLeftHand_roll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLeftHand_roll.Location = new System.Drawing.Point(303, 20);
-            this.lblLeftHand_roll.Name = "lblLeftHand_roll";
-            this.lblLeftHand_roll.Size = new System.Drawing.Size(143, 50);
-            this.lblLeftHand_roll.TabIndex = 4;
-            this.lblLeftHand_roll.Text = "0";
-            this.lblLeftHand_roll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblLeftHand_pitch
-            // 
-            this.lblLeftHand_pitch.AutoSize = true;
-            this.lblLeftHand_pitch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLeftHand_pitch.Location = new System.Drawing.Point(151, 20);
-            this.lblLeftHand_pitch.Name = "lblLeftHand_pitch";
-            this.lblLeftHand_pitch.Size = new System.Drawing.Size(146, 50);
-            this.lblLeftHand_pitch.TabIndex = 5;
-            this.lblLeftHand_pitch.Text = "0";
-            this.lblLeftHand_pitch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblLeftHand_yaw
-            // 
-            this.lblLeftHand_yaw.AutoSize = true;
-            this.lblLeftHand_yaw.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLeftHand_yaw.Location = new System.Drawing.Point(3, 20);
-            this.lblLeftHand_yaw.Name = "lblLeftHand_yaw";
-            this.lblLeftHand_yaw.Size = new System.Drawing.Size(142, 50);
-            this.lblLeftHand_yaw.TabIndex = 6;
-            this.lblLeftHand_yaw.Text = "0";
-            this.lblLeftHand_yaw.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btStartSocket
             // 
@@ -281,6 +282,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DataDisplayer";
             this.Text = "DataDisplayer";
             this.tableLayoutPanel1.ResumeLayout(false);

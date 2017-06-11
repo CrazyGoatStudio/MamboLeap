@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.displayID = new System.Windows.Forms.Label();
             this.displayTimestamp = new System.Windows.Forms.Label();
             this.displayFPS = new System.Windows.Forms.Label();
@@ -239,7 +240,7 @@
             this.label5.TabIndex = 18;
             this.label5.Text = "Stop Leap Motion Service";
             // 
-            // Form1
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -264,7 +265,8 @@
             this.Controls.Add(this.displayFPS);
             this.Controls.Add(this.displayTimestamp);
             this.Controls.Add(this.displayID);
-            this.Name = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "Main";
             this.Text = "Frame Data";
             ((System.ComponentModel.ISupportInitialize)(this.displayImages)).EndInit();
             this.ResumeLayout(false);

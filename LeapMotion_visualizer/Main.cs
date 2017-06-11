@@ -1,4 +1,5 @@
 ﻿using Leap;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -89,18 +90,35 @@ namespace LeapMotion_visualizer
 
         private void bt_startService_Click(object sender, System.EventArgs e)
         {
-            ServiceController service = new ServiceController("LeapService");
-            if ((service.Status.Equals(ServiceControllerStatus.Stopped)) ||
-                (service.Status.Equals(ServiceControllerStatus.StopPending)))
-                service.Start();
+            try
+            {
+                ServiceController service = new ServiceController("LeapService");
+                if ((service.Status.Equals(ServiceControllerStatus.Stopped)) ||
+                    (service.Status.Equals(ServiceControllerStatus.StopPending)))
+                    service.Start();
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler eh = new ErrorHandler(ex, "Servicio desconocido");
+                eh.Show();
+            }
         }
 
         private void bt_stopService_Click(object sender, System.EventArgs e)
         {
-            ServiceController service = new ServiceController("LeapService");
-            if ((service.Status.Equals(ServiceControllerStatus.Running)) ||
-                (service.Status.Equals(ServiceControllerStatus.Paused)))
-                service.Stop();
+            try
+            {
+                ServiceController service = new ServiceController("LeapService");
+                if ((service.Status.Equals(ServiceControllerStatus.Running)) ||
+                    (service.Status.Equals(ServiceControllerStatus.Paused)))
+                    service.Stop();
+            }
+            catch (Exception ex)
+            {
+                ErrorHandler eh = new ErrorHandler(ex, "Servicio desconocido");
+                eh.Show();
+            }
+            
         }
     }
 }
