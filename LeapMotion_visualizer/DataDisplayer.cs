@@ -110,6 +110,7 @@ namespace LeapMotion_visualizer
             btStopSocket.Enabled = true;
             StartServer();
         }
+
         private void btStopSocket_Click(object sender, EventArgs e)
         {
             // Detach the input channel and stop listening.
@@ -119,6 +120,7 @@ namespace LeapMotion_visualizer
             txtStatus.Text = "Socket detenido correctamente!";
             myReceiver.DetachDuplexInputChannel();
         }
+
         private void StartServer()
         {
             // Create message receiver receiving 'MyRequest' and receiving 'MyResponse'.
